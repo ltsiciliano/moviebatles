@@ -23,6 +23,14 @@ public class MoviePlay {
     @ManyToOne
     private Movie answer;
 
+    public MoviePlay(Movie firstMovie, Movie secondMovie) {
+        this.firstMovie = firstMovie;
+        this.secondMovie = secondMovie;
+    }
+
+    public MoviePlay() {
+    }
+
     public Long getId() {
         return id;
     }

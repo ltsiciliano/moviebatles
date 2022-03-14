@@ -48,24 +48,24 @@ public class CommandLineBeanConfig {
         };
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void runAfterStartup() {
-            linksOmdbapi.stream().forEach(
-                    link-> {
-                        try {
-                            movieRepository.save(
-                                    movieMapper.mapperMovies(
-                                            objectMapper.readValue(new URL(omdbapiLink + link),
-                                                    MoviesDto.class
-                                            )
-                            )
-                            );
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            );
-        System.out.println("Movies loaded");
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void runAfterStartup() {
+//            linksOmdbapi.stream().forEach(
+//                    link-> {
+//                        try {
+//                            movieRepository.save(
+//                                    movieMapper.mapperMovies(
+//                                            objectMapper.readValue(new URL(omdbapiLink + link),
+//                                                    MoviesDto.class
+//                                            )
+//                            )
+//                            );
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//            );
+//        System.out.println("Movies loaded");
+//    }
 
 }

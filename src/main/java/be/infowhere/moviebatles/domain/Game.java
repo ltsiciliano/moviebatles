@@ -1,7 +1,9 @@
 package be.infowhere.moviebatles.domain;
 
+import be.infowhere.moviebatles.enums.StatusGameEnum;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "GAME")
@@ -16,14 +18,41 @@ public class Game {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private List<MoviePlay> gamePlay;
+    private Set<MoviePlay> gamePlay;
 
-    public void setGamePlay(List<MoviePlay> gamePlay) {
+    @Column(nullable = false)
+    private StatusGameEnum status;
+
+    public Game() {
+    }
+
+    public Game(User user, Set<MoviePlay> gamePlay, StatusGameEnum status) {
+        this.user = user;
+        this.gamePlay = gamePlay;
+        this.status = status;
+    }
+
+    public Game(Long id, User user, Set<MoviePlay> gamePlay, StatusGameEnum status) {
+        this.id = id;
+        this.user = user;
+        this.gamePlay = gamePlay;
+        this.status = status;
+    }
+
+    public Set<MoviePlay> getGamePlay() {
+        return gamePlay;
+    }
+
+    public void setGamePlay(Set<MoviePlay> gamePlay) {
         this.gamePlay = gamePlay;
     }
 
-    public List<MoviePlay> getGamePlay() {
-        return gamePlay;
+    public StatusGameEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusGameEnum statusGame) {
+        this.status = statusGame;
     }
 
     public Long getId() {
