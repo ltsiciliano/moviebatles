@@ -1,7 +1,7 @@
 package be.infowhere.moviebatles.mapper;
 
 import be.infowhere.moviebatles.domain.Movie;
-import be.infowhere.moviebatles.dto.MoviesDto;
+import be.infowhere.moviebatles.dto.MovieDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,9 +10,9 @@ import org.mapstruct.Mapping;
 public interface MovieMapper {
 
     @Mapping(target = "title", source = "title")
-    Movie mapperMovies(MoviesDto moviesDto);
+    Movie mapperMovies(MovieDto movieDto);
 
     @InheritInverseConfiguration
-    MoviesDto mapperMovies(Movie moviesDto);
+    MovieDto mapperMovies(Movie moviesDto);
 
 }

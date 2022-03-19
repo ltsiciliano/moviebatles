@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GameService {
-    void startNewGame(User user) throws GameException;
+    Game startNewGame(User user) throws GameException;
     void finishGame(User user) throws GameException;
     MoviePlay nextQuestion(User user) throws GameException;
 }

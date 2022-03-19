@@ -44,7 +44,7 @@ public class GameServiceImpl implements GameService {
 
     @Transactional
     @Override
-    public void startNewGame(User user) throws GameException {
+    public Game startNewGame(User user) throws GameException {
         if(gameRepository.findByUserAndStatus(user,StatusGameEnum.ONGOING).isPresent()){
             throw new GameException(String.format(MessagesUtils.errorGameOngoing,null));
         }
@@ -63,8 +63,7 @@ public class GameServiceImpl implements GameService {
                         movies.get(1)
                 ))
         );
-        gameRepository.save(gameOngoing);
-
+        return gameRepository.save(gameOngoing);
     }
 
     @Transactional

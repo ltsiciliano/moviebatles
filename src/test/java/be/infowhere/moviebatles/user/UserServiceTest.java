@@ -1,4 +1,4 @@
-package be.infowhere.moviebatles.service.user;
+package be.infowhere.moviebatles.user;
 
 import be.infowhere.moviebatles.domain.User;
 import be.infowhere.moviebatles.repository.UserRepository;
@@ -22,7 +22,6 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
-
     @MockBean
     private UserRepository userRepository;
 

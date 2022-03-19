@@ -20,14 +20,14 @@ public class NumberUtilsImpl implements NumberUtils {
 
     @Override
     public int getQtdCombinations(List<String> values) {
-        if(values==null || values.size() < 1){
+        if(values==null || values.size() <= 1){
             return 0;
         }
 
         return Sets.cartesianProduct(
                 Sets.newHashSet(values),
                 Sets.newHashSet(values))
-                .size() - values.size();
+                .size() - (values.size()*2);
 
     }
 

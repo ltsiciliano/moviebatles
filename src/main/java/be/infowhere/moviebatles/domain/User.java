@@ -26,6 +26,9 @@ public class User {
     @OneToMany
     private List<Game> games;
 
+    public User() {
+    }
+
     public User(@NonNull String name, @NonNull String login, @NonNull String password) {
         this.name = name;
         this.login = login;

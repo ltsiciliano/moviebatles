@@ -1,9 +1,6 @@
 package be.infowhere.moviebatles.config;
 
-import be.infowhere.moviebatles.domain.Movie;
 import be.infowhere.moviebatles.domain.User;
-import be.infowhere.moviebatles.dto.MoviesDto;
-import be.infowhere.moviebatles.dto.ResultSearchMoviesDto;
 import be.infowhere.moviebatles.mapper.MovieMapper;
 import be.infowhere.moviebatles.repository.MovieRepository;
 import be.infowhere.moviebatles.repository.UserRepository;
@@ -11,15 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class CommandLineBeanConfig {

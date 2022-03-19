@@ -1,4 +1,4 @@
-package be.infowhere.moviebatles.service.game;
+package be.infowhere.moviebatles.service;
 
 import be.infowhere.moviebatles.domain.Game;
 import be.infowhere.moviebatles.domain.Movie;

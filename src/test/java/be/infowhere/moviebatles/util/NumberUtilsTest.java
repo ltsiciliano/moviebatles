@@ -1,4 +1,4 @@
-package be.infowhere.moviebatles.service.util;
+package be.infowhere.moviebatles.util;
 
 import be.infowhere.moviebatles.utils.NumberUtils;
 import com.google.common.collect.Lists;
