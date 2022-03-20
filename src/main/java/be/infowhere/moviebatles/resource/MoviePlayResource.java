@@ -55,13 +55,16 @@ public class MoviePlayResource {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/answer")
-    public ResponseEntity postAnswerQuestion(@RequestBody MoviePlayDto moviePlay) throws GameException {
+    public ResponseEntity postAnswerQuestion(@RequestBody MoviePlayDto moviePlayDto) throws GameException {
         User user = new User(1L,"leandro","lelele","lalala");
 
-        getGameOngoing(user);
+        Game gameOngoing = getGameOngoing(user);
+
+        MoviePlay moviePlay = moviePlayMapper.mapperMoviePlay(moviePlayDto);
+        moviePlay.setGame(gameOngoing);
 
         MoviePlay moviePlayAnswer = moviePlayService.answerQuestion(
-                moviePlayMapper.mapperMoviePlay(moviePlay)
+            moviePlay
         );
 
         return new ResponseEntity(

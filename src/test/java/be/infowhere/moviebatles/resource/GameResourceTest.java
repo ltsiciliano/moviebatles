@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,7 +36,7 @@ public class GameResourceTest {
     private GameMapper gameMapper;
 
     @Test
-    public void getInvoiceById() throws Exception{
+    public void startNewGame() throws Exception{
 
         when(gameService.startNewGame(any())).thenReturn(
                 GameExampleSupport.buildGame()
@@ -52,6 +52,25 @@ public class GameResourceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.gamePlay[0].firstMovie.imdbID", Matchers.equalTo("tt12345")))
                 .andExpect(jsonPath("$.gamePlay[0].answer", Matchers.nullValue()));
+    }
+
+    @Test
+    public void finishGame() throws Exception{
+
+        when(gameService.startNewGame(any())).thenReturn(
+                GameExampleSupport.buildGame()
+        );
+        GameDto gameDto = GameDtoExampleSupport.buildGame();
+        when(gameMapper.mapperGame((Game)any())).thenReturn(
+                gameDto
+        );
+
+        this.mockMvc.perform(
+                get(GAME_BASE_PATH + "/finish"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(gameService,times(1)).finishGame(any());
     }
 
 }
