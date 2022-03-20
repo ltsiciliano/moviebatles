@@ -5,10 +5,10 @@ import be.infowhere.moviebatles.domain.Movie;
 import be.infowhere.moviebatles.domain.MoviePlay;
 import be.infowhere.moviebatles.enums.StatusGameEnum;
 import be.infowhere.moviebatles.mapper.GameMapperImpl;
-import be.infowhere.moviebatles.resource.GameResource;
 import be.infowhere.moviebatles.service.GameService;
 import com.google.common.collect.Sets;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,12 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(GameResource.class)
 @Import(GameMapperImpl.class)
@@ -34,6 +34,7 @@ public class GameResourceTest {
     @MockBean
     private GameService gameService;
 
+    @Disabled
     @Test
     public void getInvoiceById() throws Exception{
 

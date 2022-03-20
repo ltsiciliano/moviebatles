@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -202,7 +203,11 @@ public class GameServiceTest {
         moviePlay1.getSecondMovie().setImdbID("tt99999");
         moviePlay2.setAnswer(moviePlay1.getFirstMovie());
 
-        Game game = new Game(1L,user, Set.of(moviePlay1,moviePlay2),StatusGameEnum.ONGOING);
+        Set<MoviePlay> moviePlays = new HashSet<>();
+        moviePlays.add(moviePlay1);
+        moviePlays.add(moviePlay2);
+
+        Game game = new Game(1L,user, moviePlays,StatusGameEnum.ONGOING);
         Movie firstMovie = buildMovie("tt2222",10L);
         Movie secondMovie = buildMovie("tt99999",11L);
 

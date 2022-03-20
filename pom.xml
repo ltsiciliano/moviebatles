@@ -19,6 +19,7 @@
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <guava.version>r05</guava.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
+        <springdoc-openapi-ui.version>1.6.4</springdoc-openapi-ui.version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,6 +48,11 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
 
         <dependency>

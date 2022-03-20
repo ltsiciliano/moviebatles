@@ -84,19 +84,25 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public MoviePlay nextQuestion(User user) throws GameException {
-        Optional<Game> gameOngoing = getGame(user);
-        checkIfExistsQuestionToAnswer(gameOngoing);
+    public Game nextQuestion(User user) throws GameException {
+        Optional<Game> gameOngoingOpt = getGame(user);
+        checkIfExistsQuestionToAnswer(gameOngoingOpt);
 
-        List<Movie> movies = buildQuestion(gameOngoing.get());
+        Game gameOngoing = gameOngoingOpt.get();
+
+        List<Movie> movies = buildQuestion(gameOngoing);
 
         MoviePlay newMoviePlay = new MoviePlay();
         newMoviePlay.setAnswer(null);
         newMoviePlay.setFirstMovie(movies.get(0));
         newMoviePlay.setSecondMovie(movies.get(1));
-        newMoviePlay.setGame(gameOngoing.get());
+        newMoviePlay.setGame(gameOngoing);
 
-        return moviePlayRepository.save(newMoviePlay);
+        gameOngoing.getGamePlay().add(
+                moviePlayRepository.save(newMoviePlay)
+        );
+
+        return gameOngoing;
     }
 
     private void checkIfExistsQuestionToAnswer(Optional<Game> gameOngoing) throws GameException {

@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface GameService {
     Game startNewGame(User user) throws GameException;
     void finishGame(User user) throws GameException;
-    MoviePlay nextQuestion(User user) throws GameException;
+    Game nextQuestion(User user) throws GameException;
 }
