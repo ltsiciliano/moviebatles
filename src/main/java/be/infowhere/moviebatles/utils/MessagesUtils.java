@@ -6,4 +6,5 @@ public class MessagesUtils {
     public static final String errorThereIsOpenQuestionToAnswer = "Existe questão em aberta para ser respondida";
     public static final String errorMaxNumberCombinationQuestionReached = "Número máximo de combinações de filmes alcançada";
     public static final String okGameStarted = "Jogo iniciado";
+    public static String errorAnswerCouldNotBeProcess = "Resposta não pode ser processada. Verifique os dados da resposta";
 }

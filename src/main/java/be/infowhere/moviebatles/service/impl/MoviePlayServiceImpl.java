@@ -39,7 +39,20 @@ public class MoviePlayServiceImpl implements MoviePlayService {
 
     @Override
     public MoviePlay answerQuestion(MoviePlay moviePlay) throws GameException {
+        validAnswer(moviePlay);
         return moviePlayRepository.save(moviePlay);
+    }
+
+    private void validAnswer(MoviePlay moviePlay) throws GameException {
+        if(Objects.isNull(moviePlay) ||
+                Objects.isNull(moviePlay.getFirstMovie()) ||
+                Objects.isNull(moviePlay.getSecondMovie()) ||
+                Objects.isNull(moviePlay.getAnswer()) ||
+                Objects.isNull(moviePlay.getGame()) ||
+                Objects.isNull(moviePlay.getId())
+        ){
+            throw new GameException(MessagesUtils.errorAnswerCouldNotBeProcess);
+        }
     }
 
     @Override

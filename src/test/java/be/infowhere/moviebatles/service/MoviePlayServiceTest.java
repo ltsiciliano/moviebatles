@@ -6,9 +6,10 @@ import be.infowhere.moviebatles.domain.MoviePlay;
 import be.infowhere.moviebatles.domain.User;
 import be.infowhere.moviebatles.enums.StatusGameEnum;
 import be.infowhere.moviebatles.exceptions.GameException;
-import be.infowhere.moviebatles.repository.GameRepository;
 import be.infowhere.moviebatles.repository.MoviePlayRepository;
 import be.infowhere.moviebatles.repository.MovieRepository;
+import be.infowhere.moviebatles.support.GameExampleSupport;
+import be.infowhere.moviebatles.support.MoviePlayExampleSupport;
 import be.infowhere.moviebatles.utils.MessagesUtils;
 import be.infowhere.moviebatles.utils.NumberUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,8 +29,7 @@ import static be.infowhere.moviebatles.support.MovieExampleSupport.buildMovie;
 import static be.infowhere.moviebatles.support.MoviePlayExampleSupport.buildMoviePlay;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,7 +40,7 @@ public class MoviePlayServiceTest {
     private MoviePlayService moviePlayService;
 
     @MockBean
-    private GameRepository gameRepository;
+    private GameService gameService;
 
     @MockBean
     private MovieRepository movieRepository;
@@ -53,10 +53,15 @@ public class MoviePlayServiceTest {
 
     private User user;
 
+    private MoviePlay moviePlay;
+
     @BeforeAll
     public void init(){
         user = new User(1L,"test","test","test");
     }
+
+
+    //NEXT QUESTION
 
     @Test
     public void nextQuestionGameWhenThereIsNoGameOngoing_ERROR() throws Exception{
@@ -77,10 +82,6 @@ public class MoviePlayServiceTest {
         MoviePlay moviePlay = buildMoviePlay();
         Game game = new Game(1L,user, Set.of(moviePlay),StatusGameEnum.ONGOING);
 
-        when(gameRepository.findByUserAndStatus(any(),any())).thenReturn(
-                Optional.of(game)
-        );
-
         try{
             moviePlayService.nextQuestion(game);
             fail();
@@ -98,10 +99,6 @@ public class MoviePlayServiceTest {
 
         Game game = new Game(1L,user, Set.of(moviePlay),StatusGameEnum.ONGOING);
 
-        when(gameRepository.findByUserAndStatus(any(),any())).thenReturn(
-                Optional.of(game)
-        );
-
         when(numberUtils.getQtdCombinations(any())).thenReturn(1);
 
         try{
@@ -112,7 +109,6 @@ public class MoviePlayServiceTest {
             assertEquals(MessagesUtils.errorMaxNumberCombinationQuestionReached,ge.getMessage());
         }
     }
-
 
     @Test
     public void nextQuestionGameWithQuestion() throws Exception{
@@ -136,7 +132,6 @@ public class MoviePlayServiceTest {
         Movie secondMovie = buildMovie("tt99999",11L);
 
         when(numberUtils.getRandomNumber(anyInt())).thenReturn(1).thenReturn(2);
-        when(gameRepository.findByUserAndStatus(any(),any())).thenReturn(Optional.of(game));
         when(movieRepository.findByImdbID("tt2222")).thenReturn(Optional.of(firstMovie));
         when(movieRepository.findByImdbID("tt99999")).thenReturn(Optional.of(secondMovie));
 
@@ -151,6 +146,98 @@ public class MoviePlayServiceTest {
         }catch (GameException ge){
             fail();
         }
+    }
+
+    //ANSWER
+    @Test
+    public void answerQuestionGameWhen_NULL_ERROR() throws Exception{
+
+        try{
+            moviePlayService.answerQuestion(null);
+            fail();
+        }catch (GameException ge){
+            assertNotNull(ge);
+            assertTrue(MessagesUtils.errorAnswerCouldNotBeProcess.contains(ge.getMessage()));
+        }
+    }
+
+    @Test
+    public void answerQuestionGameWhen_ANSWER_FIRST_QUESTION_NULL_ERROR() throws Exception{
+
+        moviePlay = MoviePlayExampleSupport.buildMoviePlay();
+        moviePlay.setFirstMovie(null);
+
+        try{
+            moviePlayService.answerQuestion(moviePlay);
+            fail();
+        }catch (GameException ge){
+            assertNotNull(ge);
+            assertTrue(MessagesUtils.errorAnswerCouldNotBeProcess.contains(ge.getMessage()));
+        }
+    }
+
+    @Test
+    public void answerQuestionGameWhen_SECOND_FIRST_QUESTION_NULL_ERROR() throws Exception{
+
+        moviePlay = MoviePlayExampleSupport.buildMoviePlay();
+        moviePlay.setSecondMovie(null);
+
+        try{
+            moviePlayService.answerQuestion(moviePlay);
+            fail();
+        }catch (GameException ge){
+            assertNotNull(ge);
+            assertTrue(MessagesUtils.errorAnswerCouldNotBeProcess.contains(ge.getMessage()));
+        }
+    }
+
+    @Test
+    public void answerQuestionGameWhen_ANSWER_NULL_ERROR() throws Exception{
+
+        moviePlay = MoviePlayExampleSupport.buildMoviePlay();
+        moviePlay.setAnswer(null);
+
+        try{
+            moviePlayService.answerQuestion(moviePlay);
+            fail();
+        }catch (GameException ge){
+            assertNotNull(ge);
+            assertTrue(MessagesUtils.errorAnswerCouldNotBeProcess.contains(ge.getMessage()));
+        }
+    }
+
+    @Test
+    public void answerQuestionGameWhen_GAME_NULL_ERROR() throws Exception{
+
+        moviePlay = MoviePlayExampleSupport.buildMoviePlay();
+        moviePlay.setGame(null);
+
+        try{
+            moviePlayService.answerQuestion(moviePlay);
+            fail();
+        }catch (GameException ge){
+            assertNotNull(ge);
+            assertTrue(MessagesUtils.errorAnswerCouldNotBeProcess.contains(ge.getMessage()));
+        }
+    }
+
+    @Test
+    public void answerQuestionGame_OK() throws Exception{
+
+        when(moviePlayRepository.save(any())).thenReturn(
+                MoviePlayExampleSupport.buildMoviePlay()
+        );
+        moviePlay = MoviePlayExampleSupport.buildMoviePlay();
+        moviePlay.setGame(GameExampleSupport.buildGame());
+        moviePlay.setId(1L);
+        moviePlay.setAnswer(MoviePlayExampleSupport.buildMoviePlay().getFirstMovie());
+
+        try{
+            moviePlayService.answerQuestion(moviePlay);
+        }catch (GameException ge){
+            fail();
+        }
+        verify(moviePlayRepository,times(1)).save(any());
     }
 
 
