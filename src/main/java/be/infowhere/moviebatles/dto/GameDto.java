@@ -44,4 +44,5 @@ public class GameDto {
     public void setStatus(StatusGameEnum status) {
         this.status = status;
     }
+
 }

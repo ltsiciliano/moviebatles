@@ -1,14 +1,13 @@
 package be.infowhere.moviebatles.resource;
 
 import be.infowhere.moviebatles.domain.Game;
-import be.infowhere.moviebatles.domain.Movie;
-import be.infowhere.moviebatles.domain.MoviePlay;
-import be.infowhere.moviebatles.enums.StatusGameEnum;
+import be.infowhere.moviebatles.dto.GameDto;
+import be.infowhere.moviebatles.mapper.GameMapper;
 import be.infowhere.moviebatles.mapper.GameMapperImpl;
 import be.infowhere.moviebatles.service.GameService;
-import com.google.common.collect.Sets;
+import be.infowhere.moviebatles.support.GameDtoExampleSupport;
+import be.infowhere.moviebatles.support.GameExampleSupport;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,13 +32,18 @@ public class GameResourceTest {
     private MockMvc mockMvc;
     @MockBean
     private GameService gameService;
+    @MockBean
+    private GameMapper gameMapper;
 
-    @Disabled
     @Test
     public void getInvoiceById() throws Exception{
 
         when(gameService.startNewGame(any())).thenReturn(
-                buildGame()
+                GameExampleSupport.buildGame()
+        );
+        GameDto gameDto = GameDtoExampleSupport.buildGame();
+        when(gameMapper.mapperGame((Game)any())).thenReturn(
+                gameDto
         );
 
         this.mockMvc.perform(
@@ -50,29 +54,4 @@ public class GameResourceTest {
                 .andExpect(jsonPath("$.gamePlay[0].answer", Matchers.nullValue()));
     }
 
-    private Game buildGame(){
-        Game game = new Game();
-
-        MoviePlay moviePlay = new MoviePlay();
-
-        Movie movie1 = new Movie();
-        movie1.setId(1L);
-        movie1.setTitle("test1");
-        movie1.setImdbID("tt12345");
-
-        moviePlay.setFirstMovie(movie1);
-
-        Movie movie2 = new Movie();
-        movie2.setId(1L);
-        movie2.setTitle("test1");
-        movie2.setImdbID("tt12345");
-
-        moviePlay.setSecondMovie(movie2);
-
-        game.setGamePlay(Sets.newHashSet(moviePlay));
-        game.setStatus(StatusGameEnum.ONGOING);
-
-        return game;
-
-    }
 }

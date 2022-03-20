@@ -2,10 +2,8 @@ package be.infowhere.moviebatles.resource;
 
 import be.infowhere.moviebatles.domain.User;
 import be.infowhere.moviebatles.dto.GameDto;
-import be.infowhere.moviebatles.dto.MoviePlayDto;
 import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.mapper.GameMapper;
-import be.infowhere.moviebatles.mapper.MoviePlayMapper;
 import be.infowhere.moviebatles.service.GameService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-import java.util.Optional;
-
 @Api(value = "Game Controller",tags = {"Game"})
 @RestController
 @RequestMapping("/game/v1")
@@ -26,13 +21,14 @@ public class GameResource {
 
     private final GameService gameService;
     private final GameMapper gameMapper;
-    private final MoviePlayMapper moviePlayMapper;
 
     @Autowired
-    public GameResource(GameService gameService, GameMapper gameMapper, MoviePlayMapper moviePlayMapper) {
+    public GameResource(
+            GameService gameService,
+            GameMapper gameMapper
+    ) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
-        this.moviePlayMapper = moviePlayMapper;
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -56,27 +52,6 @@ public class GameResource {
     public void getFinishGame() throws GameException {
         User user = new User(1L,"leandro","lelele","lalala");
         gameService.finishGame(user);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/next")
-    public ResponseEntity getNextQuestion() throws GameException {
-        User user = new User(1L,"leandro","lelele","lalala");
-
-        GameDto gameDto = gameMapper.mapperGame(gameService.nextQuestion(user));
-
-        Optional<MoviePlayDto> gameDtoToAnswer = gameDto.getGamePlay().stream().filter(
-                moviePlayDto -> Objects.isNull(moviePlayDto.getAnswer())
-        ).findFirst();
-
-        if(!gameDtoToAnswer.isPresent()){
-            throw new GameException("Questão não encontrada");
-        }
-
-        return new ResponseEntity(
-                gameDtoToAnswer.get(),
-                HttpStatus.OK
-        );
     }
 
 }
