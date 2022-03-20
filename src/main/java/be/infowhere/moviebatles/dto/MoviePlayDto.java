@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MoviePlayDto {
 
+    private Long id;
+
     @JsonProperty("game")
     private GameDto game;
 
@@ -48,5 +50,13 @@ public class MoviePlayDto {
 
     public void setAnswer(MovieDto answer) {
         this.answer = answer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

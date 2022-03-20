@@ -79,4 +79,6 @@ public class MovieDto {
     public void setImdbVotes(String imdbVotes) {
         this.imdbVotes = imdbVotes;
     }
+
+
 }

@@ -13,10 +13,11 @@ import be.infowhere.moviebatles.utils.MessagesUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(value = "Game Controller",tags = {"Game"})
+@Api(value = "Movie Plat Controller",tags = {"Movie Play"})
 @RestController
 @RequestMapping("/movieplay/v1")
 public class MoviePlayResource {
@@ -54,8 +55,10 @@ public class MoviePlayResource {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/answer")
-    public ResponseEntity postAnswerQuestion(@RequestBody MoviePlayDto moviePlayDto) throws GameException {
+    @PostMapping(value = "/answer",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity postAnswerQuestion(
+            @RequestBody MoviePlayDto moviePlayDto
+    ) throws GameException {
         User user = new User(1L,"leandro","lelele","lalala");
 
         Game gameOngoing = getGameOngoing(user);
