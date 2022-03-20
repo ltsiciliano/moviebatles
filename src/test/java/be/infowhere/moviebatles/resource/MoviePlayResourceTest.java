@@ -2,6 +2,7 @@ package be.infowhere.moviebatles.resource;
 
 import be.infowhere.moviebatles.domain.MoviePlay;
 import be.infowhere.moviebatles.dto.MoviePlayDto;
+import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.mapper.MoviePlayMapper;
 import be.infowhere.moviebatles.mapper.MoviePlayMapperImpl;
 import be.infowhere.moviebatles.service.GameService;
@@ -18,10 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,9 +45,8 @@ public class MoviePlayResourceTest {
     @MockBean
     private GameService gameService;
 
-    @Test
-    public void answerQuestion() throws Exception{
-
+    @PostConstruct
+    private void init() throws GameException {
         when(moviePlayService.answerQuestion(any())).thenReturn(
                 MoviePlayExampleSupport.buildMoviePlay()
         );
@@ -53,17 +55,29 @@ public class MoviePlayResourceTest {
                 MoviePlayDtoExampleSupport.buildMoviePlayDto()
         );
         when(moviePlayMapper.mapperMoviePlay((MoviePlayDto) any())).thenReturn(
-            MoviePlayExampleSupport.buildMoviePlay()
+                MoviePlayExampleSupport.buildMoviePlay()
         );
 
         when(gameService.getGameByStatus(any(),any())).thenReturn(
                 Optional.of(GameExampleSupport.buildGame())
         );
+    }
 
+    @Test
+    public void answerQuestion() throws Exception{
         this.mockMvc.perform(
                 post(GAME_BASE_PATH + "/answer")
                         .content(asJsonString(MoviePlayDtoExampleSupport.buildMoviePlayDto()))
                         .contentType("application/json;charset=UTF-8"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstMovie.imdbID", Matchers.equalTo("tt9999")));
+    }
+
+    @Test
+    public void nextQuestion() throws Exception{
+        this.mockMvc.perform(
+                get(GAME_BASE_PATH + "/next"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstMovie.imdbID", Matchers.equalTo("tt9999")));
