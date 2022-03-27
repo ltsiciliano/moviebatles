@@ -20,6 +20,7 @@
         <guava.version>r05</guava.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
         <springdoc-openapi-ui.version>1.6.4</springdoc-openapi-ui.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,6 +39,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>io.springfox</groupId>

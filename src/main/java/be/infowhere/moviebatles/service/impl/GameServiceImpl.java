@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,6 +62,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public Optional<Game> getGameByStatus(User user, StatusGameEnum status) {
         return gameRepository.findByUserAndStatus(user,status);
+    }
+
+    @Override
+    public List<Game> findAllByStatus(StatusGameEnum status) {
+        return gameRepository.findByStatus(status);
     }
 
     private Optional<Game> getGame(User user) throws GameException {

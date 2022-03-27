@@ -15,4 +15,5 @@ public interface GameService {
     Game startNewGame(User user) throws GameException;
     void finishGame(User user) throws GameException;
     Optional<Game> getGameByStatus(User user, StatusGameEnum status);
+    List<Game> findAllByStatus(StatusGameEnum status);
 }
