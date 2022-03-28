@@ -21,6 +21,7 @@
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
         <springdoc-openapi-ui.version>1.6.4</springdoc-openapi-ui.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -92,6 +93,12 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${jacoco-maven-plugin.version}</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -117,6 +124,35 @@
                         <!-- other annotation processors -->
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>be/infowhere/moviebatles/config/**</exclude>
+                        <exclude>be/infowhere/moviebatles/domain/**</exclude>
+                        <exclude>be/infowhere/moviebatles/dto/**</exclude>
+                        <exclude>be/infowhere/moviebatles/exceptions/**</exclude>
+                        <exclude>be/infowhere/moviebatles/enums/**</exclude>
+                        <exclude>be/infowhere/moviebatles/mapper/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
