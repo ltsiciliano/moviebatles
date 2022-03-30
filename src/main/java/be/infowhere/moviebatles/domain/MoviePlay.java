@@ -8,6 +8,7 @@ import java.util.Objects;
 public class MoviePlay {
 
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
 

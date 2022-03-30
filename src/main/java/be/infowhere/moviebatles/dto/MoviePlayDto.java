@@ -8,9 +8,6 @@ public class MoviePlayDto {
 
     private Long id;
 
-    @JsonProperty("game")
-    private GameDto game;
-
     @JsonProperty("firstMovie")
     private MovieDto firstMovie;
 
@@ -19,14 +16,6 @@ public class MoviePlayDto {
 
     @JsonProperty("answer")
     private MovieDto answer;
-
-    public GameDto getGame() {
-        return game;
-    }
-
-    public void setGame(GameDto game) {
-        this.game = game;
-    }
 
     public MovieDto getFirstMovie() {
         return firstMovie;

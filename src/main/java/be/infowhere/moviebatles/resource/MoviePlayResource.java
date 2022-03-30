@@ -9,6 +9,7 @@ import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.mapper.MoviePlayMapper;
 import be.infowhere.moviebatles.service.GameService;
 import be.infowhere.moviebatles.service.MoviePlayService;
+import be.infowhere.moviebatles.service.UserService;
 import be.infowhere.moviebatles.utils.MessagesUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +26,26 @@ public class MoviePlayResource {
     private final MoviePlayMapper moviePlayMapper;
     private final MoviePlayService moviePlayService;
     private final GameService gameService;
+    private final UserService userService;
 
     @Autowired
     public MoviePlayResource(
             MoviePlayMapper moviePlayMapper,
             MoviePlayService moviePlayService,
-            GameService gameService
-    ) {
+            GameService gameService,
+            UserService userService) {
         this.moviePlayMapper = moviePlayMapper;
         this.moviePlayService = moviePlayService;
         this.gameService = gameService;
+        this.userService = userService;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/next")
     public ResponseEntity getNextQuestion() throws GameException {
-        User user = new User(1L,"leandro","lelele","lalala");
-
-        Game gameOngoing = getGameOngoing(user);
+        Game gameOngoing = getGameOngoing(
+                userService.findByLogin(userService.findCurrentUserName()).orElseThrow(()-> new GameException("Usuário não localizado"))
+        );
 
         MoviePlay moviePlay = moviePlayService.nextQuestion(gameOngoing);
 
@@ -59,9 +62,9 @@ public class MoviePlayResource {
     public ResponseEntity postAnswerQuestion(
             @RequestBody MoviePlayDto moviePlayDto
     ) throws GameException {
-        User user = new User(1L,"leandro","lelele","lalala");
-
-        Game gameOngoing = getGameOngoing(user);
+        Game gameOngoing = getGameOngoing(
+                userService.findByLogin(userService.findCurrentUserName()).orElseThrow(()-> new GameException("Usuário não localizado"))
+        );
 
         MoviePlay moviePlay = moviePlayMapper.mapperMoviePlay(moviePlayDto);
         moviePlay.setGame(gameOngoing);

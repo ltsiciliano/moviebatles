@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.List;
 
 @Configuration
-@Profile("prd")
+@Profile("test")
 public class LoadMoviesBeanConfig {
     @Autowired
     private ObjectMapper objectMapper;

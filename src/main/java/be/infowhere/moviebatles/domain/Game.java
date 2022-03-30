@@ -3,6 +3,7 @@ package be.infowhere.moviebatles.domain;
 import be.infowhere.moviebatles.enums.StatusGameEnum;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,7 @@ public class Game {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private Set<MoviePlay> gamePlay;
+    private Set<MoviePlay> gamePlay=new HashSet<>();
 
     @Column(nullable = false)
     private StatusGameEnum status;

@@ -72,7 +72,7 @@ public class MoviePlayServiceImpl implements MoviePlayService {
         newMoviePlay.setSecondMovie(movies.get(1));
         newMoviePlay.setGame(gameOngoing);
 
-        return moviePlayRepository.save(newMoviePlay);
+        return moviePlayRepository.saveAndFlush(newMoviePlay);
     }
 
     private void checkIfExistsQuestionToAnswer(Game gameOngoing) throws GameException {

@@ -12,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(nullable = false)
-    private Long id;
+    private Long idUser;
 
     @Column(nullable = false)
     private String name;
@@ -26,28 +26,36 @@ public class User {
     @OneToMany
     private List<Game> games;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_user",
+            joinColumns = @JoinColumn(name = "idUser"),
+            inverseJoinColumns = @JoinColumn(name = "idRole"))
+    private List<Role> grantedRole;
+
     public User() {
     }
 
-    public User(@NonNull String name, @NonNull String login, @NonNull String password) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-    }
-
     public User(Long id, @NonNull String name, @NonNull String login, @NonNull String password) {
-        this.id = id;
+        this.idUser = id;
         this.name = name;
         this.login = login;
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public User(String name, String login, String password, List<Role> grantedRole) {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.grantedRole = grantedRole;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long id) {
+        this.idUser = id;
     }
 
     public String getName() {
@@ -80,5 +88,13 @@ public class User {
 
     public void setGames(List<Game> games) {
         this.games = games;
+    }
+
+    public List<Role> getGrantedAuthority() {
+        return grantedRole;
+    }
+
+    public void setGrantedAuthority(List<Role> grantedRole) {
+        this.grantedRole = grantedRole;
     }
 }

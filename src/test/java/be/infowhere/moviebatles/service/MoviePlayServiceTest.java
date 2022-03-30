@@ -49,7 +49,7 @@ public class MoviePlayServiceTest {
     private NumberUtils numberUtils;
 
     @MockBean
-    MoviePlayRepository moviePlayRepository;
+    private MoviePlayRepository moviePlayRepository;
 
     private User user;
 
@@ -136,13 +136,15 @@ public class MoviePlayServiceTest {
         when(movieRepository.findByImdbID("tt99999")).thenReturn(Optional.of(secondMovie));
 
         ArgumentCaptor<MoviePlay> moviePlayArgumentCaptor = ArgumentCaptor.forClass(MoviePlay.class);
-        when(moviePlayRepository.save(moviePlayArgumentCaptor.capture())).thenReturn(new MoviePlay());
+        when(moviePlayRepository.saveAndFlush(moviePlayArgumentCaptor.capture())).thenReturn(new MoviePlay());
 
         try{
             moviePlayService.nextQuestion(game);
             assertEquals(
                     ("tt2222" + "tt99999").hashCode(),
-                    (moviePlayArgumentCaptor.getValue().getFirstMovie().getImdbID()+moviePlayArgumentCaptor.getValue().getSecondMovie().getImdbID()).hashCode());
+                    (moviePlayArgumentCaptor.getValue().getFirstMovie().getImdbID()+
+                            moviePlayArgumentCaptor.getValue().getSecondMovie().getImdbID())
+                            .hashCode());
         }catch (GameException ge){
             fail();
         }

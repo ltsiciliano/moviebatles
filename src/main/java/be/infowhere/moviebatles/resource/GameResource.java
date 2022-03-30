@@ -5,6 +5,7 @@ import be.infowhere.moviebatles.dto.GameDto;
 import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.mapper.GameMapper;
 import be.infowhere.moviebatles.service.GameService;
+import be.infowhere.moviebatles.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,23 +22,25 @@ public class GameResource {
 
     private final GameService gameService;
     private final GameMapper gameMapper;
+    private final UserService userService;
 
     @Autowired
     public GameResource(
             GameService gameService,
-            GameMapper gameMapper
-    ) {
+            GameMapper gameMapper,
+            UserService userService) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
+        this.userService = userService;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/new")
     public ResponseEntity getNewGame() throws GameException {
 
-        User user = new User(1L,"leandro","lelele","lalala");
+        User user = userService.findByLogin(userService.findCurrentUserName()).orElseThrow(()-> new GameException("Usuário não localizado"));
 
-        GameDto gameDto = gameMapper.mapperGame(
+        GameDto gameDto = gameMapper.mapperGameToDto(
                 gameService.startNewGame(user)
         );
 
@@ -50,8 +53,9 @@ public class GameResource {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/finish")
     public void getFinishGame() throws GameException {
-        User user = new User(1L,"leandro","lelele","lalala");
-        gameService.finishGame(user);
+        gameService.finishGame(
+                userService.findByLogin(userService.findCurrentUserName()).orElseThrow(()-> new GameException("Usuário não localizado"))
+        );
     }
 
 }

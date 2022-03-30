@@ -8,6 +8,7 @@ import be.infowhere.moviebatles.repository.GameRepository;
 import be.infowhere.moviebatles.service.GameService;
 import be.infowhere.moviebatles.service.MoviePlayService;
 import be.infowhere.moviebatles.utils.MessagesUtils;
+import com.google.inject.internal.util.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -38,17 +41,19 @@ public class GameServiceImpl implements GameService {
             throw new GameException(String.format(MessagesUtils.errorGameOngoing,null));
         }
 
-        Game gameOngoing = new Game(
-                user,
-                new HashSet<>(),
-                StatusGameEnum.ONGOING
+        Game gameOngoing = gameRepository.save(
+                new Game(
+                        user,
+                        new HashSet<>(),
+                        StatusGameEnum.ONGOING
+                )
         );
 
         gameOngoing.setGamePlay(
-                Set.of(moviePlayService.nextQuestion(gameOngoing))
+                Stream.of(moviePlayService.nextQuestion(gameOngoing)).collect(Collectors.toSet())
         );
 
-        return gameRepository.save(gameOngoing);
+        return gameRepository.saveAndFlush(gameOngoing);
     }
 
     @Transactional

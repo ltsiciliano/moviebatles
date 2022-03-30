@@ -10,9 +10,12 @@ import org.mapstruct.Mapping;
 public interface GameMapper {
 
     @Mapping(target = "user", source = "user")
-    Game mapperGame(GameDto gameDto);
+    @Mapping(target = "gamePlay", source = "gamePlay")
+    @Mapping(target = "status", source = "status")
+//    @Mapping(target="gamePlay.game", ignore = true)
+    Game mapperDtoToGame(GameDto gameDto);
 
     @InheritInverseConfiguration
-    GameDto mapperGame(Game game);
+    GameDto mapperGameToDto(Game game);
 
 }

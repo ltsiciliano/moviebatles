@@ -1,12 +1,15 @@
 package be.infowhere.moviebatles.resource;
 
+import be.infowhere.moviebatles.config.SecurityConfig;
 import be.infowhere.moviebatles.domain.MoviePlay;
+import be.infowhere.moviebatles.domain.User;
 import be.infowhere.moviebatles.dto.MoviePlayDto;
 import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.mapper.MoviePlayMapper;
 import be.infowhere.moviebatles.mapper.MoviePlayMapperImpl;
 import be.infowhere.moviebatles.service.GameService;
 import be.infowhere.moviebatles.service.MoviePlayService;
+import be.infowhere.moviebatles.service.UserService;
 import be.infowhere.moviebatles.support.GameExampleSupport;
 import be.infowhere.moviebatles.support.MoviePlayDtoExampleSupport;
 import be.infowhere.moviebatles.support.MoviePlayExampleSupport;
@@ -14,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -30,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MoviePlayResource.class)
+@WebMvcTest(value = MoviePlayResource.class,excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @Import(MoviePlayMapperImpl.class)
 public class MoviePlayResourceTest {
 
@@ -44,9 +49,14 @@ public class MoviePlayResourceTest {
     private MoviePlayMapper moviePlayMapper;
     @MockBean
     private GameService gameService;
+    @MockBean
+    private UserService userService;
 
     @PostConstruct
     private void init() throws GameException {
+
+        User user = new User(1L,"test","test","test");
+
         when(moviePlayService.answerQuestion(any())).thenReturn(
                 MoviePlayExampleSupport.buildMoviePlay()
         );
@@ -61,6 +71,11 @@ public class MoviePlayResourceTest {
         when(gameService.getGameByStatus(any(),any())).thenReturn(
                 Optional.of(GameExampleSupport.buildGame())
         );
+        when(userService.findCurrentUserName())
+                .thenReturn(user.getLogin());
+
+        when(userService.findByLogin(any()))
+                .thenReturn(Optional.of(user));
     }
 
     @Test

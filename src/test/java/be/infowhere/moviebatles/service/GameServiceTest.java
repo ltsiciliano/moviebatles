@@ -5,6 +5,7 @@ import be.infowhere.moviebatles.domain.User;
 import be.infowhere.moviebatles.enums.StatusGameEnum;
 import be.infowhere.moviebatles.exceptions.GameException;
 import be.infowhere.moviebatles.repository.GameRepository;
+import be.infowhere.moviebatles.support.GameExampleSupport;
 import be.infowhere.moviebatles.support.MoviePlayExampleSupport;
 import be.infowhere.moviebatles.utils.MessagesUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -69,6 +70,10 @@ public class GameServiceTest {
         when(moviePlayService.nextQuestion(any())).thenReturn(
                 MoviePlayExampleSupport.buildMoviePlay()
         );
+        when(gameRepository.save(any()))
+                .thenReturn(GameExampleSupport.buildGame());
+        when(gameRepository.saveAndFlush(any()))
+                .thenReturn(GameExampleSupport.buildGame());
 
 
         try{
@@ -78,7 +83,7 @@ public class GameServiceTest {
         }
 
         verify(moviePlayService,times(1)).nextQuestion(any());
-        verify(gameRepository,times(1)).save(any());
+        verify(gameRepository,times(1)).saveAndFlush(any());
     }
 
     @Test
